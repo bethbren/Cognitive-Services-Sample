@@ -10,7 +10,7 @@ const house = (() => {
     const device = {
         radio: "radio",
         computer: "computer",
-        light: "light",
+        lights: "lights",
         oven: "oven",
         tv: "tv",
         state: {
@@ -20,10 +20,10 @@ const house = (() => {
     };
 
     const devicesInRooms = {
-        [room.bedroom]: [device.light, device.radio],
-        [room.kitchen]: [device.light, device.oven],
-        [room.livingRoom]: [device.light, device.tv],
-        [room.office]: [device.light, device.computer]
+        [room.bedroom]: [device.lights, device.radio],
+        [room.kitchen]: [device.lights, device.oven],
+        [room.livingRoom]: [device.lights, device.tv],
+        [room.office]: [device.lights, device.computer]
     };
 
     function command(house, room, device, state) {
