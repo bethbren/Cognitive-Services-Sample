@@ -11,17 +11,16 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <script src="luis.js"></script>
         <script type="application/javascript">
+            const region = "eastus";
+            const appId = "76ddfbac-e266-4389-b74a-7c51b683aa8d";
+            const subscriptionKey = "910c2994f6e5462fa205e8d0f9e4fd91";
+
+            const f = luisAsync.bind(null, $, region, appId, subscriptionKey);
+
             function submit() {
                 const utterance = document.getElementById("utterance").value;
-                console.log(`Utterance ${utterance}`);
 
-                const region = "eastus";
-                const appId = "76ddfbac-e266-4389-b74a-7c51b683aa8d";
-                const subscriptionKey = "910c2994f6e5462fa205e8d0f9e4fd91";
-
-                // const f = luisAsync.bind(null, $, region, appId, subscriptionKey)
-
-                const result = luisAsync($, region, appId, subscriptionKey, utterance);
+                const result = f(utterance);
                 result.then(
                     (x) => document.getElementById("result").innerHTML = JSON.stringify(x),
                     () => alert("error")

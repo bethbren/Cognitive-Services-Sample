@@ -1,4 +1,3 @@
-
 function luisAsync(jQuery, region, appId, subscriptionKey, utterance) {
     const queryParameters = {
         q: utterance,
