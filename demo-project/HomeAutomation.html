@@ -39,7 +39,7 @@
     <script src="house.js"></script>
 
     <!-- SDK REFERENCE -->
-    <script src="../../distrib/speech.sdk.bundle.js"></script>
+    <script src="../distrib/speech.sdk.bundle.js"></script>
 
     <!-- SDK USAGE -->
     <script>
@@ -51,7 +51,7 @@
                 onComplete(window.SDK);
             }
         }
-        
+
         // Setup the recognizer
         function RecognizerSetup(SDK, subscriptionKey) {
             var recognizerConfig = new SDK.RecognizerConfig(
@@ -65,7 +65,7 @@
 
 
             var useTokenAuth = false;
-            
+
             var authentication = function() {
                 if (!useTokenAuth)
                     return new SDK.CognitiveSubscriptionKeyAuthentication(subscriptionKey);
@@ -187,7 +187,7 @@
                     RecognizerStart(SDK, recognizer);
                     startBtn.disabled = true;
                     stopBtn.disabled = false;
-                }                
+                }
             });
 
             speechKey.addEventListener("focus", function () {
@@ -226,9 +226,9 @@
         }
 
         function UpdateRecognizedHypothesis(text, append) {
-        /*    if (append) 
+        /*    if (append)
                 hypothesisDiv.innerHTML += text + " ";
-            else 
+            else
                 hypothesisDiv.innerHTML = text;
 
             var length = hypothesisDiv.innerHTML.length;

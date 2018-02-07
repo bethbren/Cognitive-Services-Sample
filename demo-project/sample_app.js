@@ -1,1 +1,1 @@
-window.SDK = require('../../distrib/Speech.Browser.Sdk.js')
+window.SDK = require('../distrib/Speech.Browser.Sdk.js')
