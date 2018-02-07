@@ -4,7 +4,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var tslint = require("gulp-tslint");
 var minify = require('gulp-minify');
 var git = require('gulp-git');
-var versionBump = require('gulp-bump')
+var versionBump = require('gulp-bump');
 var tagVersion = require('gulp-tag-version');
 var webpack = require('webpack-stream');
 
@@ -36,7 +36,7 @@ gulp.task("build_ES5", function() {
 gulp.task("build", ["build_ES5"]);
 
 gulp.task("bundle", ["build_ES5"], function () {
-    return gulp.src('samples/browser/sample_app.js')
+    return gulp.src('demo-project/sample_app.js')
     .pipe(webpack({
         output: {filename: 'speech.sdk.bundle.js'},
         devtool: 'source-map',
@@ -62,11 +62,10 @@ function BumpVersionTagAndCommit(versionType) {
   return gulp.src(['./package.json'])
         // bump the version number
         .pipe(versionBump({type:versionType}))
-        // save it back to filesystem 
+        // save it back to filesystem
         .pipe(gulp.dest('./'))
-        // commit the changed version number 
+        // commit the changed version number
         .pipe(git.commit('Bumping package version'))
         // tag it in the repository
     .pipe(tagVersion());
 }
- 
