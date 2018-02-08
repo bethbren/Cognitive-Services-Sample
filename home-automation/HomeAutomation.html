@@ -27,6 +27,14 @@
                 <td><input id="LuisKey" type="text" size="40" value="YOUR_LUIS_API_KEY"></td>
             </tr>
             <tr>
+                <td align="right">Command:</td>
+                <td><input id="Command" type="text" size="40" value="Enter a command"></td>
+            </tr>
+            <tr>
+                <td align="right"></td>
+                <td><button onclick="submit()">Submit</button></td>
+            </tr>
+            <tr>
                 <td></td>
                 <td>
                     <button id="startBtn" disabled="disabled">Start</button>
@@ -36,7 +44,46 @@
         </table>
     </div>
 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="house.js"></script>
+    <script src="luis.js"></script>
+
+    <!-- LUIS integration -->
+    <script type="application/javascript">
+        const region = "eastus";
+        const appId = "76ddfbac-e266-4389-b74a-7c51b683aa8d";
+
+        const parseHomeAutomationCommandAsync = luis.parseUtteranceAsync.bind(null, $, region, appId);
+
+        function submit() {
+            const subscriptionKey = document.getElementById("LuisKey").value;
+            const utterance = document.getElementById("Command").value;
+
+            const result = parseHomeAutomationCommandAsync(subscriptionKey, utterance);
+            result.then(
+                x => {
+                    console.log(x);
+
+                    const room = luis.highestScoredEntity(x, luis.homeAutomation.entity.room);
+                    const device = luis.highestScoredEntity(x, luis.homeAutomation.entity.device);
+
+                    const intent = luis.highestScoredIntent(x);
+                    const state = (() => {
+                        // Map LUIS' intent names to the house API's device state names
+                        switch (intent) {
+                            case luis.homeAutomation.intent.on: return house.device.state.on;
+                            case luis.homeAutomation.intent.off: return house.device.state.off;
+                            default: return null;
+                        }
+                    })();
+
+                    // TODO pass in house DOM object
+                    house.command(undefined, room, device, state);
+                },
+                () => alert("error")
+            );
+        }
+    </script>
 
     <!-- SDK REFERENCE -->
     <script src="../azure-speech-web-sdk/distrib/speech.sdk.bundle.js"></script>

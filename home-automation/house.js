@@ -27,11 +27,17 @@ const house = (() => {
     };
 
     function command(house, room, device, state) {
+        if (!devicesInRooms[room]) {
+            alert(`[Error] The house does not have a room called the "${room}"`);
+            return;
+        }
+
         const deviceInRoom = devicesInRooms[room].includes(device);
 
         if (deviceInRoom) {
             // TODO pass the house DOM object as the `house` parameter
             // TODO set device state if it is in the room
+            alert(`Got it: turn ${state} the ${device} in the ${room}`);
         } else {
             alert(`[Error] The ${room} does not have a ${device}!`)
         }
