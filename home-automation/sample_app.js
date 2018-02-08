@@ -1,1 +1,1 @@
-window.SDK = require('../distrib/Speech.Browser.Sdk.js')
+window.SDK = require('../azure-speech-web-sdk/distrib/Speech.Browser.Sdk.js');

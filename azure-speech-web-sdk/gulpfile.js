@@ -36,7 +36,7 @@ gulp.task("build_ES5", function() {
 gulp.task("build", ["build_ES5"]);
 
 gulp.task("bundle", ["build_ES5"], function () {
-    return gulp.src('demo-project/sample_app.js')
+    return gulp.src('../home-automation/sample_app.js')
     .pipe(webpack({
         output: {filename: 'speech.sdk.bundle.js'},
         devtool: 'source-map',
