@@ -61,7 +61,7 @@ const luis = (() => {
         return {
             intent: intent,
             entity: entity
-        }
+        };
     })();
 
     return {
@@ -69,5 +69,5 @@ const luis = (() => {
         highestScoredIntent: highestScoredIntent,
         highestScoredEntity: highestScoredEntity,
         homeAutomation: homeAutomation
-    }
+    };
 })();
