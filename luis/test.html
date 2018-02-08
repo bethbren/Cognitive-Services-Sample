@@ -5,6 +5,7 @@
     </head>
     <body>
         <p>Call LUIS</p>
+        <input type="text" id="subscription-key">
         <input type="text" id="utterance">
         <button onclick="submit()">Submit</button>
         <p id="result"></p>
@@ -13,14 +14,14 @@
         <script type="application/javascript">
             const region = "eastus";
             const appId = "76ddfbac-e266-4389-b74a-7c51b683aa8d";
-            const subscriptionKey = "910c2994f6e5462fa205e8d0f9e4fd91";
 
-            const f = luisAsync.bind(null, $, region, appId, subscriptionKey);
+            const parseHomeAutomationCommandAsync = luisAsync.bind(null, $, region, appId);
 
             function submit() {
+                const subscriptionKey = document.getElementById("subscription-key").value;
                 const utterance = document.getElementById("utterance").value;
 
-                const result = f(utterance);
+                const result = parseHomeAutomationCommandAsync(subscriptionKey, utterance);
                 result.then(
                     (x) => document.getElementById("result").innerHTML = JSON.stringify(x),
                     () => alert("error")
