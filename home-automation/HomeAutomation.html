@@ -61,13 +61,13 @@
 
             const result = parseHomeAutomationCommandAsync(subscriptionKey, utterance);
             result.then(
-                x => {
-                    console.log(x);
+                luisResponse => {
+                    console.log(luisResponse);
 
-                    const room = luis.highestScoredEntity(x, luis.homeAutomation.entity.room);
-                    const device = luis.highestScoredEntity(x, luis.homeAutomation.entity.device);
+                    const room = luis.highestScoredEntity(luisResponse, luis.homeAutomation.entity.room);
+                    const device = luis.highestScoredEntity(luisResponse, luis.homeAutomation.entity.device);
 
-                    const intent = luis.highestScoredIntent(x);
+                    const intent = luis.highestScoredIntent(luisResponse);
                     const state = (() => {
                         // Map LUIS' intent names to the house API's device state names
                         switch (intent) {
@@ -80,7 +80,19 @@
                     // TODO pass in house DOM object
                     house.command(undefined, room, device, state);
                 },
-                () => alert("error")
+                err => {
+                    console.log(err);
+
+                    // Get a human-readable message to show to the user
+                    let message;
+                    try {
+                        message = JSON.parse(err.responseText).message;
+                    } catch (e) {
+                        message = "An error occurred while calling the LUIS endpoint";
+                    }
+
+                    alert(`[Error] ${message}`);
+                }
             );
         }
     </script>
