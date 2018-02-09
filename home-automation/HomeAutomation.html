@@ -98,7 +98,7 @@
     </script>
 
     <script src="../azure-speech-web-sdk/distrib/speech.sdk.bundle.js"></script>
-    <script src="speech-sdk-setup.js"></script>
+    <script src="speechRecognizer.js"></script>
 
     <!-- Speech SDK integration -->
     <script>
@@ -146,7 +146,7 @@
                     }
                     // hypothesisDiv.innerHTML = "";
                     // phraseDiv.innerHTML = "";
-                    RecognizerStart(SDK, recognizer);
+                    speechRecognizer.start(SDK, recognizer);
                     startBtn.disabled = true;
                     stopBtn.disabled = false;
                 // }
@@ -165,13 +165,13 @@
             //     Setup();
             //     hypothesisDiv.innerHTML = "";
             //     phraseDiv.innerHTML = "";
-            //     RecognizerStart(SDK, recognizer);
+            //     speechRecognizer.start(SDK, recognizer);
             //     startBtn.disabled = true;
             //     stopBtn.disabled = false;
             //     filePicker.value = "";
             // });
             stopBtn.addEventListener("click", function () {
-                RecognizerStop(SDK, recognizer);
+                speechRecognizer.stop(SDK, recognizer);
                 startBtn.disabled = false;
                 stopBtn.disabled = true;
             });
@@ -182,10 +182,10 @@
         });
         function Setup() {
             if (recognizer != null) {
-                RecognizerStop(SDK, recognizer);
+                speechRecognizer.stop(SDK, recognizer);
             }
-            // recognizer = RecognizerSetup(SDK, recognitionMode.value, languageOptions.value, SDK.SpeechResultFormat[formatOptions.value], speechKey.value);
-            recognizer = RecognizerSetup(SDK, "Interactive", "en-US", SDK.SpeechResultFormat["Simple"], speechKey.value);
+            // recognizer = speechRecognizer.setup(SDK, recognitionMode.value, languageOptions.value, SDK.SpeechResultFormat[formatOptions.value], speechKey.value);
+            recognizer = speechRecognizer.setup(SDK, "Interactive", "en-US", SDK.SpeechResultFormat["Simple"], speechKey.value);
         }
         function UpdateStatus(status) {
             // statusDiv.innerHTML = status;
