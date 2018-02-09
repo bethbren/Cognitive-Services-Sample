@@ -133,14 +133,14 @@
             // formatOptions.addEventListener("change", Setup);
             // recognitionMode.addEventListener("change", Setup);
             startBtn.addEventListener("click", function () {
-                if (speechKey.value == "" || speechKey.value == "YOUR_BING_SPEECH_API_KEY") {
+                if (speechKey.value === "" || speechKey.value === "YOUR_BING_SPEECH_API_KEY") {
                     alert("Please enter your Bing Speech subscription key!");
                     return;
                 }
                 // if (inputSource.value === "File") {
                 //     filePicker.click();
                 // } else {
-                    if (!recognizer || previousSubscriptionKey != speechKey.value) {
+                    if (!recognizer || previousSubscriptionKey !== speechKey.value) {
                         previousSubscriptionKey = speechKey.value;
                         Setup();
                     }
@@ -152,12 +152,12 @@
                 // }
             });
             speechKey.addEventListener("focus", function () {
-               if (speechKey.value == "YOUR_BING_SPEECH_API_KEY") {
+               if (speechKey.value === "YOUR_BING_SPEECH_API_KEY") {
                    speechKey.value = "";
                }
             });
             speechKey.addEventListener("focusout", function () {
-               if (speechKey.value == "") {
+               if (speechKey.value === "") {
                    speechKey.value = "YOUR_BING_SPEECH_API_KEY";
                }
             });
@@ -181,7 +181,7 @@
             });
         });
         function Setup() {
-            if (recognizer != null) {
+            if (recognizer) {
                 speechRecognizer.stop(SDK, recognizer);
             }
             // recognizer = speechRecognizer.setup(SDK, recognitionMode.value, languageOptions.value, SDK.SpeechResultFormat[formatOptions.value], speechKey.value);
