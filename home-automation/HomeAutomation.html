@@ -102,54 +102,38 @@
 
     <!-- Speech SDK integration -->
     <script>
-        // On document load resolve the SDK dependency
-        function Initialize(onComplete) {
-            if (!!window.SDK) {
-                document.getElementById('content').style.display = 'block';
-                document.getElementById('warning').style.display = 'none';
-                onComplete(window.SDK);
-            }
-        }
+        let startBtn;
+        let stopBtn;
+        let speechKey;
+        let formatOptions;
+        let SDK;
+        let recognizer;
+        let previousSpeechKey;
 
-        var startBtn, stopBtn, hypothesisDiv, phraseDiv, statusDiv;
-        var speechKey, languageOptions, formatOptions, recognitionMode, inputSource, filePicker;
-        var SDK;
-        var recognizer;
-        var previousSubscriptionKey;
         document.addEventListener("DOMContentLoaded", function () {
             createBtn = document.getElementById("createBtn");
             startBtn = document.getElementById("startBtn");
             stopBtn = document.getElementById("stopBtn");
-            // phraseDiv = document.getElementById("phraseDiv");
-            // hypothesisDiv = document.getElementById("hypothesisDiv");
-            // statusDiv = document.getElementById("statusDiv");
             speechKey = document.getElementById("SpeechKey");
-            // languageOptions = document.getElementById("languageOptions");
-            // formatOptions = document.getElementById("formatOptions");
-            // inputSource = document.getElementById("inputSource");
-            // recognitionMode = document.getElementById("recognitionMode");
-            // filePicker = document.getElementById('filePicker');
-            // languageOptions.addEventListener("change", Setup);
-            // formatOptions.addEventListener("change", Setup);
-            // recognitionMode.addEventListener("change", Setup);
+
             startBtn.addEventListener("click", function () {
-                if (speechKey.value === "" || speechKey.value === "YOUR_BING_SPEECH_API_KEY") {
+                if (!speechKey.value || speechKey.value === "YOUR_BING_SPEECH_API_KEY") {
                     alert("Please enter your Bing Speech subscription key!");
                     return;
                 }
-                // if (inputSource.value === "File") {
-                //     filePicker.click();
-                // } else {
-                    if (!recognizer || previousSubscriptionKey !== speechKey.value) {
-                        previousSubscriptionKey = speechKey.value;
-                        Setup();
+
+                if (!recognizer || previousSpeechKey !== speechKey.value) {
+                    previousSpeechKey = speechKey.value;
+
+                    if (recognizer) {
+                        speechRecognizer.stop(recognizer);
                     }
-                    // hypothesisDiv.innerHTML = "";
-                    // phraseDiv.innerHTML = "";
-                    speechRecognizer.start(recognizer);
-                    startBtn.disabled = true;
-                    stopBtn.disabled = false;
-                // }
+                    recognizer = speechRecognizer.create(SDK, speechKey.value);
+                }
+
+                speechRecognizer.start(recognizer);
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
             });
             speechKey.addEventListener("focus", function () {
                if (speechKey.value === "YOUR_BING_SPEECH_API_KEY") {
@@ -157,56 +141,35 @@
                }
             });
             speechKey.addEventListener("focusout", function () {
-               if (speechKey.value === "") {
+               if (!speechKey.value) {
                    speechKey.value = "YOUR_BING_SPEECH_API_KEY";
                }
             });
-            // filePicker.addEventListener("change", function () {
-            //     Setup();
-            //     hypothesisDiv.innerHTML = "";
-            //     phraseDiv.innerHTML = "";
-            //     speechRecognizer.start(recognizer);
-            //     startBtn.disabled = true;
-            //     stopBtn.disabled = false;
-            //     filePicker.value = "";
-            // });
             stopBtn.addEventListener("click", function () {
                 speechRecognizer.stop(recognizer);
                 startBtn.disabled = false;
                 stopBtn.disabled = true;
             });
-            Initialize(function (speechSdk) {
-                SDK = speechSdk;
+
+            // Enable the example if we can find the speech SDK
+            if (window.SDK) {
+                document.getElementById('content').style.display = 'block';
+                document.getElementById('warning').style.display = 'none';
+                SDK = window.SDK;
                 startBtn.disabled = false;
-            });
-        });
-        function Setup() {
-            if (recognizer) {
-                speechRecognizer.stop(recognizer);
             }
-            // recognizer = speechRecognizer.create(SDK, recognitionMode.value, languageOptions.value, SDK.SpeechResultFormat[formatOptions.value], speechKey.value);
-            recognizer = speechRecognizer.create(SDK, "Interactive", "en-US", SDK.SpeechResultFormat["Simple"], speechKey.value);
-        }
+        });
+
+        // Functions used internally by the recognizer
+        // TODO this is a hack. These should be passed in to `start`
         function UpdateStatus(status) {
-            // statusDiv.innerHTML = status;
         }
         function UpdateRecognizedHypothesis(text, append) {
-            // if (append) {
-            //     hypothesisDiv.innerHTML += text + " ";
-            // } else {
-            //     hypothesisDiv.innerHTML = text;
-            // }
-            // var length = hypothesisDiv.innerHTML.length;
-            // if (length > 403) {
-            //     hypothesisDiv.innerHTML = "..." + hypothesisDiv.innerHTML.substr(length-400, length);
-            // }
         }
         function OnSpeechEndDetected() {
             stopBtn.disabled = true;
         }
         function UpdateRecognizedPhrase(json) {
-            // hypothesisDiv.innerHTML = "";
-            // phraseDiv.innerHTML += json + "\n";
         }
         function OnComplete() {
             startBtn.disabled = false;

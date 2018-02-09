@@ -1,28 +1,14 @@
 const speechRecognizer = (() => {
     // Create and initialize a recognizer from the SDK
-    function create(SDK, recognitionMode, language, format, subscriptionKey) {
-        switch (recognitionMode) {
-            case "Interactive":
-                recognitionMode = SDK.RecognitionMode.Interactive;
-                break;
-            case "Conversation":
-                recognitionMode = SDK.RecognitionMode.Conversation;
-                break;
-            case "Dictation":
-                recognitionMode = SDK.RecognitionMode.Dictation;
-                break;
-            default:
-                recognitionMode = SDK.RecognitionMode.Interactive;
-        }
-
+    function create(SDK, subscriptionKey) {
         const recognizerConfig = new SDK.RecognizerConfig(
             new SDK.SpeechConfig(
                 new SDK.Context(
                     new SDK.OS(navigator.userAgent, "Browser", null),
                     new SDK.Device("SpeechSample", "SpeechSample", "1.0.00000"))),
-            recognitionMode,
-            language, // Supported languages are specific to each recognition mode. Refer to docs.
-            format); // SDK.SpeechResultFormat.Simple (Options - Simple/Detailed)
+            SDK.RecognitionMode.Interactive,
+            "en-US",
+            SDK.SpeechResultFormat.Simple);
 
         const authentication = new SDK.CognitiveSubscriptionKeyAuthentication(subscriptionKey);
         return SDK.CreateRecognizer(recognizerConfig, authentication);
