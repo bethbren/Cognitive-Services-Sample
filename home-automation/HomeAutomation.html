@@ -146,7 +146,7 @@
                     }
                     // hypothesisDiv.innerHTML = "";
                     // phraseDiv.innerHTML = "";
-                    speechRecognizer.start(SDK, recognizer);
+                    speechRecognizer.start(recognizer);
                     startBtn.disabled = true;
                     stopBtn.disabled = false;
                 // }
@@ -165,13 +165,13 @@
             //     Setup();
             //     hypothesisDiv.innerHTML = "";
             //     phraseDiv.innerHTML = "";
-            //     speechRecognizer.start(SDK, recognizer);
+            //     speechRecognizer.start(recognizer);
             //     startBtn.disabled = true;
             //     stopBtn.disabled = false;
             //     filePicker.value = "";
             // });
             stopBtn.addEventListener("click", function () {
-                speechRecognizer.stop(SDK, recognizer);
+                speechRecognizer.stop(recognizer);
                 startBtn.disabled = false;
                 stopBtn.disabled = true;
             });
@@ -182,10 +182,10 @@
         });
         function Setup() {
             if (recognizer) {
-                speechRecognizer.stop(SDK, recognizer);
+                speechRecognizer.stop(recognizer);
             }
-            // recognizer = speechRecognizer.setup(SDK, recognitionMode.value, languageOptions.value, SDK.SpeechResultFormat[formatOptions.value], speechKey.value);
-            recognizer = speechRecognizer.setup(SDK, "Interactive", "en-US", SDK.SpeechResultFormat["Simple"], speechKey.value);
+            // recognizer = speechRecognizer.create(SDK, recognitionMode.value, languageOptions.value, SDK.SpeechResultFormat[formatOptions.value], speechKey.value);
+            recognizer = speechRecognizer.create(SDK, "Interactive", "en-US", SDK.SpeechResultFormat["Simple"], speechKey.value);
         }
         function UpdateStatus(status) {
             // statusDiv.innerHTML = status;

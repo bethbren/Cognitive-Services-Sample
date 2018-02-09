@@ -1,5 +1,6 @@
 const speechRecognizer = (() => {
-    function setup(SDK, recognitionMode, language, format, subscriptionKey) {
+    // Create and initialize a recognizer from the SDK
+    function create(SDK, recognitionMode, language, format, subscriptionKey) {
         switch (recognitionMode) {
             case "Interactive":
                 recognitionMode = SDK.RecognitionMode.Interactive;
@@ -27,7 +28,8 @@ const speechRecognizer = (() => {
         return SDK.CreateRecognizer(recognizerConfig, authentication);
     }
 
-    function start(SDK, recognizer) {
+    // Start streaming audio and returning results
+    function start(recognizer) {
         recognizer.Recognize((event) => {
             switch (event.Name) {
                 case "RecognitionTriggeredEvent":
@@ -79,12 +81,13 @@ const speechRecognizer = (() => {
         });
     }
 
-    function stop(SDK, recognizer) {
+    // Stop streaming audio
+    function stop(recognizer) {
         recognizer.AudioSource.TurnOff();
     }
 
     return {
-        setup: setup,
+        create: create,
         start: start,
         stop: stop
     };
