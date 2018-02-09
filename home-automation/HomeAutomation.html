@@ -44,16 +44,26 @@
         </table>
     </div>
 
+    <div id="houseContainer">
+        <div id="houseSvg" width="400" height="300"></div>
+    </div>
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="house.js"></script>
     <script src="luis.js"></script>
 
     <!-- LUIS integration -->
     <script type="application/javascript">
+        let $houseSvg = null;
         const region = "eastus";
         const appId = "76ddfbac-e266-4389-b74a-7c51b683aa8d";
 
         const parseHomeAutomationCommandAsync = luis.parseUtteranceAsync.bind(null, $, region, appId);
+
+        $( document ).ready(function() {
+            $('#houseSvg').load('house.svg');
+            $houseSvg = $('#houseSvg');
+        });
 
         function submit() {
             const subscriptionKey = document.getElementById("LuisKey").value;
@@ -78,7 +88,7 @@
                     })();
 
                     // TODO pass in house DOM object
-                    house.command(undefined, room, device, state);
+                    house.command($houseSvg, room, device, state);
                 },
                 () => alert("error")
             );
@@ -219,15 +229,15 @@
             speechKey = document.getElementById("SpeechKey");
 
             startBtn.addEventListener("click", function () {
-                if (key.value == "" || key.value == "YOUR_BING_SPEECH_API_KEY") {
+                if (speechKey.value == "" || speechKey.value == "YOUR_BING_SPEECH_API_KEY") {
                     alert("Please enter your Bing Speech subscription key!");
                     return;
                 }
                 if (inputSource.value === "File") {
                     filePicker.click();
                 } else {
-                    if (!recognizer || previousSubscriptionKey != key.value) {
-                        previousSubscriptionKey = key.value;
+                    if (!recognizer || previousSubscriptionKey != speechKey.value) {
+                        previousSubscriptionKey = speechKey.value;
                         Setup();
                     }
 
