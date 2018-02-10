@@ -27,14 +27,6 @@
                 <td><input id="LuisKey" type="text" size="40"></td>
             </tr>
             <tr>
-                <td align="right">Command:</td>
-                <td><input id="Command" type="text" size="40" value="Enter a command"></td>
-            </tr>
-            <tr>
-                <td align="right"></td>
-                <td><button onclick="submit()">Submit</button></td>
-            </tr>
-            <tr>
                 <td></td>
                 <td>
                     <button id="startBtn" disabled="disabled">Start</button>
@@ -69,7 +61,6 @@
 
         function submit(utterance) {
             const subscriptionKey = document.getElementById("LuisKey").value;
-            utterance = utterance || document.getElementById("Command").value; // DEBUG
 
             const result = parseHomeAutomationCommandAsync(subscriptionKey, utterance);
             result.then(
