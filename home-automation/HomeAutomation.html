@@ -67,17 +67,18 @@
             $houseSvg = $('#houseSvg');
         });
 
-        function submit(string) {
+        function submit(utterance) {
             const subscriptionKey = document.getElementById("LuisKey").value;
-            const utterance = document.getElementById("Command").value;
+            utterance = utterance || document.getElementById("Command").value; // DEBUG
 
-            const result = parseHomeAutomationCommandAsync(subscriptionKey, string);
+            const result = parseHomeAutomationCommandAsync(subscriptionKey, utterance);
             result.then(
                 luisResponse => {
                     console.log(luisResponse);
 
                     const room = luis.highestScoredEntity(luisResponse, luis.homeAutomation.entity.room);
                     const device = luis.highestScoredEntity(luisResponse, luis.homeAutomation.entity.device);
+                    const operation = luis.highestScoredEntity(luisResponse, luis.homeAutomation.entity.operation);
 
                     const intent = luis.highestScoredIntent(luisResponse);
                     const state = (() => {
@@ -85,11 +86,33 @@
                         switch (intent) {
                             case luis.homeAutomation.intent.on: return house.device.state.on;
                             case luis.homeAutomation.intent.off: return house.device.state.off;
-                            default: return null;
+                            default:
+                                // fall back to operation
+                                switch (operation) {
+                                    case "on": return house.device.state.on;
+                                    case "off": return house.device.state.off;
+                                    default: return null;
+                                }
                         }
                     })();
 
-                    house.command($houseSvg, room, device, state);
+                    if (!room || !device || !state) {
+                        // Tell the user what we didn't understand
+                        let confusion = [];
+                        if (!room) {
+                            confusion.push('room');
+                        }
+                        if (!device) {
+                            confusion.push('device');
+                        }
+                        if (!state) {
+                            confusion.push('intent');
+                        }
+
+                        alert(`Sorry, I couldn't "${utterance}" because I don't recognize the ${confusion.join(", ")}`);
+                    } else {
+                        house.command($houseSvg, room, device, state);
+                    }
                 },
                 err => {
                     console.log(err);
