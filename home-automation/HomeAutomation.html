@@ -20,11 +20,11 @@
             </tr>
             <tr>
                 <td align="right"><a href="https://www.microsoft.com/cognitive-services/en-us/sign-up" target="_blank">Speech Subscription</a>:</td>
-                <td><input id="SpeechKey" type="text" size="40" value="YOUR_BING_SPEECH_API_KEY"></td>
+                <td><input id="SpeechKey" type="text" size="40"></td>
             </tr>
             <tr>
                 <td align="right"><a href="https://www.microsoft.com/cognitive-services/en-us/sign-up" target="_blank">LUIS Subscription</a>:</td>
-                <td><input id="LuisKey" type="text" size="40" value="YOUR_LUIS_API_KEY"></td>
+                <td><input id="LuisKey" type="text" size="40"></td>
             </tr>
             <tr>
                 <td align="right">Command:</td>
@@ -48,9 +48,11 @@
         <div id="houseSvg" width="400" height="300"></div>
     </div>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script src="house.js"></script>
     <script src="luis.js"></script>
+    <script src="../azure-speech-web-sdk/distrib/speech.sdk.bundle.js"></script>
+    <script src="speechRecognizer.js"></script>
 
     <!-- LUIS integration -->
     <script type="application/javascript">
@@ -60,7 +62,7 @@
 
         const parseHomeAutomationCommandAsync = luis.parseUtteranceAsync.bind(null, $, region, appId);
 
-        $( document ).ready(function() {
+        $(document).ready(function() {
             $('#houseSvg').load('house.svg');
             $houseSvg = $('#houseSvg');
         });
@@ -87,7 +89,6 @@
                         }
                     })();
 
-                    // TODO pass in house DOM object
                     house.command($houseSvg, room, device, state);
                 },
                 err => {
@@ -107,11 +108,11 @@
         }
     </script>
 
-    <script src="../azure-speech-web-sdk/distrib/speech.sdk.bundle.js"></script>
-    <script src="speechRecognizer.js"></script>
-
     <!-- Speech SDK integration -->
-    <script>
+    <script type="application/javascript">
+        const speechKeyDefaultText = "Enter your subscription key for Bing Speech";
+        const luisKeyDefaultText = "Enter your subscription key for LUIS";
+
         let startBtn;
         let stopBtn;
         let speechKey;
@@ -125,10 +126,34 @@
             startBtn = document.getElementById("startBtn");
             stopBtn = document.getElementById("stopBtn");
             speechKey = document.getElementById("SpeechKey");
+            luisKey = document.getElementById("LuisKey");
+
+            // Set some default text on a field that gets hidden when it has focus
+            function setDefaultText(field, defaultText) {
+                field.value = defaultText;
+                field.addEventListener("focus", function () {
+                    if (field.value === defaultText) {
+                        field.value = "";
+                    }
+                });
+                field.addEventListener("focusout", function () {
+                    if (!field.value) {
+                        field.value = defaultText;
+                    }
+                });
+            }
+
+            setDefaultText(speechKey, speechKeyDefaultText);
+            setDefaultText(luisKey, luisKeyDefaultText);
 
             startBtn.addEventListener("click", function () {
-                if (!speechKey.value || speechKey.value === "YOUR_BING_SPEECH_API_KEY") {
+                if (!speechKey.value || speechKey.value === speechKeyDefaultText) {
                     alert("Please enter your Bing Speech subscription key!");
+                    return;
+                }
+
+                if (!luisKey.value || luisKey.value === luisKeyDefaultText) {
+                    alert("Please enter your LUIS subscription key!");
                     return;
                 }
 
@@ -145,16 +170,6 @@
                 startBtn.disabled = true;
                 stopBtn.disabled = false;
             });
-            speechKey.addEventListener("focus", function () {
-               if (speechKey.value === "YOUR_BING_SPEECH_API_KEY") {
-                   speechKey.value = "";
-               }
-            });
-            speechKey.addEventListener("focusout", function () {
-               if (!speechKey.value) {
-                   speechKey.value = "YOUR_BING_SPEECH_API_KEY";
-               }
-            });
             stopBtn.addEventListener("click", function () {
                 speechRecognizer.stop(recognizer);
                 startBtn.disabled = false;
@@ -169,7 +184,6 @@
                 startBtn.disabled = false;
             }
         });
-
 
         function OnSpeechEndDetected() {
             stopBtn.disabled = true;
