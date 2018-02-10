@@ -1,3 +1,4 @@
+// Wrapper for the speech SDK to make it simpler for what our app needs
 const speechRecognizer = (() => {
     // Create and initialize a recognizer from the SDK
     function create(SDK, subscriptionKey) {

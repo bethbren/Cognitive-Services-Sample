@@ -62,7 +62,7 @@
 
         const parseHomeAutomationCommandAsync = luis.parseUtteranceAsync.bind(null, $, region, appId);
 
-        $( document ).ready(function() {
+        $(document).ready(function() {
             $('#houseSvg').load('house.svg');
             $houseSvg = $('#houseSvg');
         });
@@ -89,7 +89,6 @@
                         }
                     })();
 
-                    // TODO pass in house DOM object
                     house.command($houseSvg, room, device, state);
                 },
                 err => {
