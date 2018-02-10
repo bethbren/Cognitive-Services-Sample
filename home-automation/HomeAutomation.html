@@ -48,9 +48,11 @@
         <div id="houseSvg" width="400" height="300"></div>
     </div>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script src="house.js"></script>
     <script src="luis.js"></script>
+    <script src="../azure-speech-web-sdk/distrib/speech.sdk.bundle.js"></script>
+    <script src="speechRecognizer.js"></script>
 
     <!-- LUIS integration -->
     <script type="application/javascript">
@@ -107,9 +109,6 @@
         }
     </script>
 
-    <script src="../azure-speech-web-sdk/distrib/speech.sdk.bundle.js"></script>
-    <script src="speechRecognizer.js"></script>
-
     <!-- Speech SDK integration -->
     <script>
         let startBtn;
@@ -146,14 +145,14 @@
                 stopBtn.disabled = false;
             });
             speechKey.addEventListener("focus", function () {
-               if (speechKey.value === "YOUR_BING_SPEECH_API_KEY") {
-                   speechKey.value = "";
-               }
+                if (speechKey.value === "YOUR_BING_SPEECH_API_KEY") {
+                    speechKey.value = "";
+                }
             });
             speechKey.addEventListener("focusout", function () {
-               if (!speechKey.value) {
-                   speechKey.value = "YOUR_BING_SPEECH_API_KEY";
-               }
+                if (!speechKey.value) {
+                    speechKey.value = "YOUR_BING_SPEECH_API_KEY";
+                }
             });
             stopBtn.addEventListener("click", function () {
                 speechRecognizer.stop(recognizer);
@@ -169,7 +168,6 @@
                 startBtn.disabled = false;
             }
         });
-
 
         function OnSpeechEndDetected() {
             stopBtn.disabled = true;
