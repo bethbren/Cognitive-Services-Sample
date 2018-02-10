@@ -54,7 +54,7 @@ const house = (() => {
                 }
                 house.find(selector).attr("fill", "white");
             }
-            alert(`Got it: turn ${selectedState} the ${selectedDevice} in the ${selectedRoom}`);
+            //alert(`Got it: turn ${selectedState} the ${selectedDevice} in the ${selectedRoom}`);
         } else {
             alert(`[Error] The ${selectedRoom} does not have a ${selectedDevice}!`)
         }

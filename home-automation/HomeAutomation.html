@@ -65,11 +65,11 @@
             $houseSvg = $('#houseSvg');
         });
 
-        function submit() {
+        function submit(string) {
             const subscriptionKey = document.getElementById("LuisKey").value;
             const utterance = document.getElementById("Command").value;
 
-            const result = parseHomeAutomationCommandAsync(subscriptionKey, utterance);
+            const result = parseHomeAutomationCommandAsync(subscriptionKey, string);
             result.then(
                 luisResponse => {
                     console.log(luisResponse);
@@ -170,16 +170,14 @@
             }
         });
 
-        // Functions used internally by the recognizer
-        // TODO this is a hack. These should be passed in to `start`
-        function UpdateStatus(status) {
-        }
-        function UpdateRecognizedHypothesis(text, append) {
-        }
+
         function OnSpeechEndDetected() {
             stopBtn.disabled = true;
         }
         function UpdateRecognizedPhrase(json) {
+            console.log(json);
+            console.log(json.DisplayText);
+            submit(json.DisplayText);
         }
         function OnComplete() {
             startBtn.disabled = false;
